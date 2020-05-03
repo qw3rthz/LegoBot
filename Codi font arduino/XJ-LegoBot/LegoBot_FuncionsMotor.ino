@@ -4,6 +4,7 @@
 void aturar() {
   AturarMotorA();
   AturarMotorB();
+  delay(500);
 }
 
 //Atura el motor A.
@@ -72,4 +73,24 @@ void accelerarEnrere() {
   for (byte i = VELOCITAT_MIN; i < VELOCITAT_MAX; i++) {
     anarEnrere(i);
   }
+}
+
+//Gira a la dreta
+void girarDreta () {  
+  anarEndavantA(200);
+  anarEnrereB(200);
+}
+
+//Gira a la esquerra
+void girarEsquerra () {  
+  anarEndavantB(200);
+  anarEnrereA(200);
+}
+
+void girarDretaRadar() {
+  girarDreta ();
+  while (llegirRadarDavant != 0) {
+    girarDreta();
+  }
+  aturar();
 }

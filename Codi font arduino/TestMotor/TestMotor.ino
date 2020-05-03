@@ -12,13 +12,13 @@ Funcions disponibles:
   anarEnrereA(velocitat): Posa en marxa el motor B enrere a la velocitat indicada.
 */
 
-int mAVelocitat =     3;
-int mAEndavant =      7;
-int mAEnrere =        8;
+int mAVelocitat =     5;
+int mAEndavant =      8;
+int mAEnrere =        7;
 
-int mBVelocitat =     5;
-int mBEndavant =      12;
-int mBEnrere =        13;
+int mBVelocitat =     3;
+int mBEndavant =      2;
+int mBEnrere =        4;
 
 int pausa =           1000;
 int velocitatMotor =  255;
