@@ -11,16 +11,19 @@ Funcions disponibles:
   anarEnrereA(velocitat): Posa en marxa el motor A enrere a la velocitat indicada.
   anarEnrereA(velocitat): Posa en marxa el motor B enrere a la velocitat indicada.
 */
+#include <millisDelay.h>
+
+millisDelay timerPausa;
 
 int mAVelocitat =     5;
 int mAEndavant =      8;
 int mAEnrere =        7;
 
-int mBVelocitat =     3;
+int mBVelocitat =     6;
 int mBEndavant =      2;
 int mBEnrere =        4;
 
-int pausa =           1000;
+int temps =           1000;
 int velocitatMotor =  255;
 
 

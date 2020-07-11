@@ -2,12 +2,17 @@
 
 //Atura els dos motors. Para el vehicle.
 void aturar() {
-  AturarMotorA();
-  AturarMotorB();
-  eVehicleAnterior = eVehicle;
-  eVehicle = mAturat;
-  dis[0] = 0;
-  dis[1] = 0;
+  /*if (!timerPausa.isRunning()) {
+    timerPausa.start(500);
+      while (!timerPausa.justFinished()) {*/
+        AturarMotorA();
+        AturarMotorB();
+        estatMotorAnterior = estatMotor;
+        estatMotor = mAturat;
+        dis[0] = 0;
+        dis[1] = 0;
+      /*}
+  }*/
 }
 
 //Atura el motor A.
@@ -26,10 +31,11 @@ void AturarMotorB() {
 
 //Posa en marxa els dos motors i fa anar el vehicle endavant a la velocitat indicada.
 void anarEndavant(int velocitat) {
+  //Serial.println("Endavant");
   anarEndavantA(velocitat);
   anarEndavantB(velocitat);
-  eVehicleAnterior = eVehicle;
-  eVehicle = mEndavant;
+  estatMotorAnterior = estatMotor;
+  estatMotor = mEndavant;
 }
 
 //Posa en marxa el motor A endavant a la velocitat indicada.
@@ -48,10 +54,11 @@ void anarEndavantB(int velocitat) {
 
 //Posa en marxa els dos motors i fa anar el vehicle enrere a la velocitat indicada.
 void anarEnrere(int velocitat) {
+  //Serial.println("Enrere");
   anarEnrereA(velocitat);
   anarEnrereB(velocitat);
-  eVehicleAnterior = eVehicle;
-  eVehicle = mEnrere;
+  estatMotorAnterior = estatMotor;
+  estatMotor = mEnrere;
 }
 
 //Posa en marxa el motor A enrere a la velocitat indicada.
@@ -86,39 +93,42 @@ void accelerarEnrere() {
 
 //Gira a la dreta
 void girarEsquerra () {  
-  anarEndavantA(VELOCITAT_MAX);
-  anarEnrereB(VELOCITAT_MAX);
+  anarEndavantA(255);
+  anarEnrereB(255);
 }
 
 //Gira a la esquerra
 void girarDreta () {  
-  anarEndavantB(VELOCITAT_MAX);
-  anarEnrereA(VELOCITAT_MAX);
+  anarEndavantB(255);
+  anarEnrereA(255);
+  estatMotorAnterior = estatMotor;
+  estatMotor = mDreta;
 }
 
 //Gira a la esquerra 30º
 void girar30Esquerra () {  
-  anarEndavantA(VELOCITAT_MAX);
-  anarEnrereB(VELOCITAT_MAX);
+  anarEndavantA(255);
+  anarEnrereB(255);
   delay(TEMPS_GIR);
-  eVehicleAnterior = eVehicle;
-  eVehicle = mEsquerra;
+  estatMotorAnterior = estatMotor;
+  estatMotor = mEsquerra;
 }
 
 //Gira a la dreta 30º
 void girar30Dreta () {  
-  anarEndavantB(VELOCITAT_MAX);
-  anarEnrereA(VELOCITAT_MAX);
+  anarEndavantB(255);
+  anarEnrereA(255);
   delay(TEMPS_GIR);
-  eVehicleAnterior = eVehicle;
-  eVehicle = mDreta;
+  estatMotorAnterior = estatMotor;
+  estatMotor = mDreta;
 }
 
 //Gira a la esquerra 90º
 void girar90Esquerra () {  
+  Serial.println("Girar esquerra");
   for ( byte i = 0; i < 3; i++ ) {
-    anarEndavantA(VELOCITAT_MAX);
-    anarEnrereB(VELOCITAT_MAX);
+    anarEndavantA(255);
+    anarEnrereB(255);
     delay(TEMPS_GIR);
   }
   aturar();
@@ -126,11 +136,11 @@ void girar90Esquerra () {
 
 //Gira a la dreta 90º
 void girar90Dreta () {
+  Serial.println("Girar dreta");
   for ( byte i = 0; i < 3; i++ ) {
-    anarEndavantB(VELOCITAT_MAX);
-    anarEnrereA(VELOCITAT_MAX);
+    anarEndavantB(255);
+    anarEnrereA(255);
     delay(TEMPS_GIR);
-    llegirRadar();
   }
   aturar();
 }

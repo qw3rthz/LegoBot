@@ -6,9 +6,16 @@ void aturar() {
 }
 
 void aturaPausa() {
-  delay(pausa);
-  aturar();
-  delay(pausa);
+  if (!timerPausa.isRunning()) {
+    timerPausa.start(temps * 2);
+      while (!timerPausa.justFinished()) {
+        if (timerPausa.remaining() <= temps) {
+          aturar();
+        }
+      }
+  } else {
+   
+  }
 }
 
 void AturarMotorA() {

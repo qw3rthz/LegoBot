@@ -20,18 +20,18 @@ Funcions disponibles:
 #include <millisDelay.h>        //Llibreria per generar temporitzadors
 
 #define NUM_RADAR           2   // Nombre de radars utilitzats.
-#define DISTANCIA_MAX_RADAR 15  // Distància màxima de detecció en cm per cada radar.
-#define RADAR_DAVANT        13  //Pin del radar davanter
-#define RADAR_DARRERE       12  //Pin del radar del darrere
+#define DISTANCIA_MAX_RADAR 7  // Distància màxima de detecció en cm per cada radar.
+#define RADAR_DAVANT 9         //Pin del radar davanter
+#define RADAR_DARRERE 10        //Pin del radar del darrere
 
 #define VELOCITAT_MAX 255       //Velocitat màxima dels motors
 #define VELOCITAT_MIN 150       //Velocitat mínima dels motors
-#define mAturat       0         //Estat del vehicle: Aturat
-#define mEndavant     1         //Estat del vehicle: Marxant endavant.
-#define mEnrere       2         //Estat del vehicle: Marxa enrere.
-#define mDreta        3         //Estat del vehicle: Girant a la dreta.
-#define mEsquerra     4         //Estat del vehicle: Girant a l'esquerra
-#define TEMPS_GIR     150       //Temps que ha de girar el vehícle a maxima velocitat per fer un gir de 30º
+#define mAturat 0              //Estat del motor: atura
+#define mEndavant 1            //Estat del motor: en marxa endavant
+#define mEnrere 2
+#define mDreta 3
+#define mEsquerra 4//Estat del motor: en marxa enrere
+#define TEMPS_GIR 150           //Temps que ha de girar el vehícle a maxima velocitat per fer un gir de 30º
 
 byte mAVelocitat =    5;
 byte mAEndavant =     8;
@@ -41,29 +41,30 @@ byte mBVelocitat =    6;
 byte mBEndavant =     2;
 byte mBEnrere =       4;
 
-byte eVehicle =         0; //Estat actual del vehícle
-byte eVehicleAnterior = 0; //Estat anterior del vehícle
+byte estatMotor =    0;
+byte estatMotorAnterior = 0;
+
+byte dis[NUM_RADAR] = {0, 0}; //Variables de distància: 0-radar davanter, 1- radar del darrere
+
+byte delayTime0 = 50;
+unsigned long delayStart0 = 0;
+bool delayRunning0 = false;
+byte delayTime1 = 70;
+unsigned long delayStart1 = 0;
+bool delayRunning1 = false;
+//unsigned long pingTimer;      //
 
 /* Definició dels radars.
       radar[0]: radar frontal.
       radar[1]: radar del darrere.
  */
-byte dis[NUM_RADAR] = {0, 0}; //Variables de distància: 0-radar davanter, 1- radar del darrere
-
-byte delayTime0 =           50;     //Retard del timer pel radar daventer.
-unsigned long delayStart0 = 0;      //Moment d'inici del retard.
-bool delayRunning0 =        false;  //Indica si el timer està en marxa.
-
-byte delayTime1 =           70;     //Retard del timer pel radar del darrere.
-unsigned long delayStart1 = 0;      //Moment d'inici del retard.
-bool delayRunning1 =        false;  //Indica si el timer està en marxa.
-
-
 NewPing radar[NUM_RADAR] = {   // Definició de les instàncies dels radars instal.lats.
   NewPing(RADAR_DAVANT, RADAR_DAVANT, DISTANCIA_MAX_RADAR), // Per cada radar s'ha de definir el pin de trigger, el d'echo i la distància màxima de detecció.
   NewPing(RADAR_DARRERE, RADAR_DARRERE, DISTANCIA_MAX_RADAR)
 };
 
+//millisDelay pingTimer0;  //Timer de control de les lectures de radar
+//millisDelay pingTimer1;
 millisDelay timerPausa;      //Timer per les pauses
 
 void setup() {
@@ -74,9 +75,13 @@ void setup() {
   pinMode(mBVelocitat,  OUTPUT);
   pinMode(mBEndavant,   OUTPUT);
   pinMode(mBEnrere,     OUTPUT);
-  
-  delay(5000); //5 segons de espera abans de començar
 
+  Serial.begin(115200); //Per controlar la detecció. Eliminar en la versió final
+
+  //delay(2000); //5 segons de espera abans de començar
+  //pingTimer0.start(pingSpeed);
+  //pingTimer1.start(pingSpeed - 5);
+  //anarEnrere(255);
   delayStart0 = millis();
   delayStart1 = millis();
   delayRunning0 = true;
@@ -93,9 +98,9 @@ void loop() {
     radar[1].ping_timer(echoCheck1);
   }
 
-  switch (eVehicle) {
+  switch (estatMotor) {
     case mAturat:
-      switch (eVehicleAnterior) {
+      switch (estatMotorAnterior) {
         case mEndavant:
           girar90Dreta();
         break;
@@ -104,7 +109,7 @@ void loop() {
         break;
         case mAturat:
           if (dis[0] == 0) {
-            anarEndavant(VELOCITAT_MAX);
+            anarEndavant(255);
           }
         break;
       }
@@ -124,4 +129,29 @@ void loop() {
     case mEsquerra:
     break;
   }
+  /*switch (dis[0]) {
+    case 0:
+      //no detecta nada
+    break;
+    default:
+      aturar();
+      //girar90Dreta();
+      //pausa(1000);
+    break;
+  }
+    switch (dis[1]) {
+    case 0:
+      //no detecta nada
+    break;
+    default:
+      aturar();
+      //girar90Dreta();
+      //pausa(1000);
+    break;
+  }*/
+  /*if (dis[0] > 0) {
+    aturar();
+  } else {
+    anarEndavant(255);
+  }*/
 }
